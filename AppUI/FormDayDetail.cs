@@ -56,21 +56,15 @@ public partial class FormDayDetail : Form
     {
         foreach (ListViewItem accItem in ListViewAccounting.Items)
         {
-            string? accCode = accItem.Text;
-            if (accCode == null)
-                continue;
+            string accCode = accItem.Text;
 
             ListViewItem? finItem = GetCorrespondingItem(accCode);
             if (finItem == null)
                 continue;
 
-            string? accValue = accItem.SubItems[3].Text;
-            if (accValue == null)
-                continue;
+            string accValue = accItem.SubItems[3].Text;
 
-            string? finValue = finItem.SubItems[3].Text;
-            if (finValue == null)
-                continue;
+            string finValue = finItem.SubItems[3].Text;
 
             if (accValue != finValue)
             {
@@ -84,9 +78,7 @@ public partial class FormDayDetail : Form
     {
         foreach (ListViewItem item in ListViewFinancial.Items)
         {
-            string? code = item.Text;
-            if (code == null)
-                continue;
+            string code = item.Text;
 
             if (code == invoiceCode)
                 return item;
@@ -134,5 +126,32 @@ public partial class FormDayDetail : Form
         }
 
         return mergedEntries.OrderBy(entry => entry.InvoiceCode).ToList();
+    }
+
+    private void ListViewAccounting_ItemActivate(object sender, EventArgs e)
+    {
+        ListViewFinancial.SelectedItems.Clear();
+
+        string invoiceCode = ListViewAccounting.SelectedItems[0].Text;
+
+        int finIndex = GetItemIndex(invoiceCode);
+        if (finIndex == -1)
+            return;
+
+        ListViewFinancial.Items[finIndex].EnsureVisible();
+        ListViewFinancial.Items[finIndex].Selected = true;
+    }
+
+    private int GetItemIndex(string invoiceCode)
+    {
+        foreach (ListViewItem item in ListViewFinancial.Items)
+        {
+            string finCode = item.Text;
+
+            if (finCode == invoiceCode)
+                return item.Index;
+        }
+
+        return -1;
     }
 }

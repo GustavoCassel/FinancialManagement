@@ -115,6 +115,7 @@
             ListViewAccounting.UseCompatibleStateImageBehavior = false;
             ListViewAccounting.View = View.Details;
             ListViewAccounting.ColumnClick += ListViewAccounting_ColumnClick;
+            ListViewAccounting.ItemActivate += ListViewAccounting_ItemActivate;
             // 
             // columnHeader1
             // 
