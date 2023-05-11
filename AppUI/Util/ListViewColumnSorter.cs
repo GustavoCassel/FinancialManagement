@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Windows.Forms;
 
-namespace AppUI;
+namespace AppUI.Util;
 
 public sealed class ListViewColumnSorter : IComparer
 {
@@ -22,7 +21,7 @@ public sealed class ListViewColumnSorter : IComparer
     {
         if (x == null)
             throw new ArgumentNullException(nameof(x));
-        
+
         if (y == null)
             throw new ArgumentNullException(nameof(y));
 

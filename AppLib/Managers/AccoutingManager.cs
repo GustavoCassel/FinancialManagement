@@ -1,4 +1,7 @@
-﻿namespace AppLib;
+﻿using AppLib.EntryManagement;
+using AppLib.ExcelApplication;
+
+namespace AppLib.Managers;
 
 public sealed class AccoutingManager : IExcelReader
 {

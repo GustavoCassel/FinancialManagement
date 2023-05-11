@@ -1,6 +1,7 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using AppLib.EntryManagement;
+using Microsoft.Office.Interop.Excel;
 
-namespace AppLib;
+namespace AppLib.ExcelApplication;
 
 public sealed class Excel : IDisposable
 {

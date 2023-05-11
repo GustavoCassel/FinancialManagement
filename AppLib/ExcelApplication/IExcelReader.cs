@@ -1,4 +1,6 @@
-﻿namespace AppLib;
+﻿using AppLib.EntryManagement;
+
+namespace AppLib.ExcelApplication;
 
 public interface IExcelReader
 {
