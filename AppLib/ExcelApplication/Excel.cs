@@ -1,4 +1,5 @@
 ﻿using AppLib.EntryManagement;
+using AppLib.Exceptions;
 using Microsoft.Office.Interop.Excel;
 
 namespace AppLib.ExcelApplication;
@@ -16,7 +17,17 @@ public sealed class Excel : IDisposable
             Interactive = false
         };
 
-        _workbook = _application.Workbooks.Open(fileName);
+        if (_application == null)
+            throw new ExcelNotInstalledException();
+
+        _workbook = _application.Workbooks.Open(
+            Filename: fileName,
+            UpdateLinks: false,
+            ReadOnly: true
+        );
+
+        if (_workbook.Worksheets.Count != 1)
+            throw new MoreThanOneWorksheetException();
 
         _worksheet = _workbook.Worksheets[1];
     }
@@ -30,7 +41,7 @@ public sealed class Excel : IDisposable
 
         _application.Quit();
 
-        GC.SuppressFinalize(this);
+        GC.WaitForPendingFinalizers();
     }
 
     public int GetNumberOfRows()

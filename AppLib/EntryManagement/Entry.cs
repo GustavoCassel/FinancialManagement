@@ -16,7 +16,7 @@ public sealed class Entry
 
     public decimal Value
     {
-        get { return _value; }
+        get => _value;
         set
         {
             if (value <= 0)
@@ -36,6 +36,11 @@ public sealed class Entry
         Payment = payment;
         Value = value;
     }
+
+    /*public Entry GetOneForTest()
+    {
+        
+    }*/
 
     public override string ToString()
     {

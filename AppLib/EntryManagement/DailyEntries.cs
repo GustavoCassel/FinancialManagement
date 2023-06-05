@@ -31,7 +31,7 @@ public sealed class DailyEntries
     public override string ToString()
     {
         return $"""
-            Date: {Date}
+            Date: {Date.ToShortDateString()}
             Count: {Entries.Count}
             """;
     }
