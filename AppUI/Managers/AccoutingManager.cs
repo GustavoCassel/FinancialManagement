@@ -1,16 +1,17 @@
-﻿using AppLib.EntryManagement;
-using AppLib.ExcelApplication;
+﻿using AppUI.EntryManagement;
+using AppUI.ExcelApplication;
 using System.Diagnostics;
 
-namespace AppLib.Managers;
+namespace AppUI.Managers;
 
 public sealed class AccoutingManager : IExcelReader
 {
     private readonly Excel _excelReader;
     private readonly FormMenu _formMenu;
-    public AccoutingManager(Excel excelReader)
+    public AccoutingManager(Excel excelReader, FormMenu formMenu)
     {
         _excelReader = excelReader;
+        _formMenu = formMenu;
     }
 
     public List<DailyEntries> GetEntries()
@@ -20,9 +21,8 @@ public sealed class AccoutingManager : IExcelReader
 
         for (int rowIndex = 1; rowIndex < rowsCount; rowIndex++)
         {
-#if DEBUG
-            Debug.WriteLine($"Razão Contábil linha: {rowIndex}");
-#endif
+            _formMenu.UpdateLineLogger(rowsCount, rowIndex);
+
             string? dateOrDashValue = _excelReader.GetTextFromWorksheet(rowIndex, "A");
 
             if (string.IsNullOrWhiteSpace(dateOrDashValue))
@@ -52,7 +52,10 @@ public sealed class AccoutingManager : IExcelReader
             Entry? entry = GetEntry(rowIndex, daily.Date);
 
             if (entry != null)
+            {
+                _formMenu.AppendLogMessage(entry);
                 daily.AddEntry(entry);
+            }
         }
 
         return stack.OrderBy(entry => entry.Date).ToList();

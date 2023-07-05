@@ -1,4 +1,4 @@
-﻿using AppLib.EntryManagement;
+﻿using AppUI.EntryManagement;
 using AppUI.Util;
 
 namespace AppUI;
@@ -54,37 +54,48 @@ public partial class FormDayDetail : Form
 
     private void CompareAndPaintDifferent()
     {
-        foreach (ListViewItem accItem in ListViewAccounting.Items)
-        {
-            string accCode = accItem.Text;
+        FindMissingItems(ListViewAccounting, ListViewFinancial);
 
-            ListViewItem? finItem = GetCorrespondingItem(accCode);
-            if (finItem == null)
+        FindMissingItems(ListViewFinancial, ListViewAccounting);
+
+        bool isAccountingWithMoreEntries = ListViewAccounting.Items.Count > ListViewFinancial.Items.Count;
+
+        ListView viewWithMoreEntries = isAccountingWithMoreEntries
+            ? ListViewAccounting : ListViewFinancial;
+
+        ListView viewWithLessEntries = isAccountingWithMoreEntries
+            ? ListViewFinancial : ListViewAccounting;
+
+        foreach (ListViewItem moreItem in viewWithMoreEntries.Items)
+        {
+            ListViewItem? lessItem = viewWithLessEntries.Items[moreItem.Text];
+            if (lessItem == null)
                 continue;
 
-            string accValue = accItem.SubItems[3].Text;
+            string moreValue = moreItem.SubItems[3].Text;
 
-            string finValue = finItem.SubItems[3].Text;
+            string lessValue = lessItem.SubItems[3].Text;
 
-            if (accValue != finValue)
+            if (moreValue != lessValue)
             {
-                accItem.BackColor = Color.LightPink;
-                finItem.BackColor = Color.LightPink;
+                moreItem.BackColor = Color.LightPink;
+                lessItem.BackColor = Color.LightPink;
             }
         }
     }
 
-    private ListViewItem? GetCorrespondingItem(string invoiceCode)
+    private static void FindMissingItems(ListView from, ListView to)
     {
-        foreach (ListViewItem item in ListViewFinancial.Items)
+        foreach (ListViewItem fromItem in from.Items)
         {
-            string code = item.Text;
-
-            if (code == invoiceCode)
-                return item;
+            ListViewItem? toItem = to.Items[fromItem.Text];
+            if (toItem == null)
+            {
+                // if this item isn't in the other listview
+                fromItem.BackColor = Color.Red;
+                continue;
+            }
         }
-
-        return null;
     }
 
     private static void AddToListViewEntries(ListView listView, List<MergedEntry> entries)
@@ -100,7 +111,12 @@ public partial class FormDayDetail : Form
                 merged.Description
             };
 
-            listView.Items.Add(new ListViewItem(row));
+            ListViewItem item = new(row)
+            {
+                Name = merged.InvoiceCode
+            };
+
+            listView.Items.Add(item);
         }
 
         listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -134,24 +150,11 @@ public partial class FormDayDetail : Form
 
         string invoiceCode = ListViewAccounting.SelectedItems[0].Text;
 
-        int finIndex = GetItemIndex(invoiceCode);
-        if (finIndex == -1)
+        ListViewItem? item = ListViewFinancial.Items[invoiceCode];
+        if (item is null)
             return;
 
-        ListViewFinancial.Items[finIndex].EnsureVisible();
-        ListViewFinancial.Items[finIndex].Selected = true;
-    }
-
-    private int GetItemIndex(string invoiceCode)
-    {
-        foreach (ListViewItem item in ListViewFinancial.Items)
-        {
-            string finCode = item.Text;
-
-            if (finCode == invoiceCode)
-                return item.Index;
-        }
-
-        return -1;
+        item.EnsureVisible();
+        item.Selected = true;
     }
 }

@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Label label1;
+            Label label2;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDayDetail));
-            label1 = new Label();
             MainTableLayoutPanel = new TableLayoutPanel();
             LabelInfoAccouting = new Label();
-            label2 = new Label();
             ListViewAccounting = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
@@ -46,6 +46,8 @@
             columnHeader10 = new ColumnHeader();
             columnHeader8 = new ColumnHeader();
             LabelInfoFinancial = new Label();
+            label1 = new Label();
+            label2 = new Label();
             MainTableLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -109,6 +111,7 @@
             ListViewAccounting.FullRowSelect = true;
             ListViewAccounting.GridLines = true;
             ListViewAccounting.Location = new Point(3, 63);
+            ListViewAccounting.MultiSelect = false;
             ListViewAccounting.Name = "ListViewAccounting";
             ListViewAccounting.Size = new Size(536, 595);
             ListViewAccounting.TabIndex = 1;
@@ -150,6 +153,7 @@
             ListViewFinancial.FullRowSelect = true;
             ListViewFinancial.GridLines = true;
             ListViewFinancial.Location = new Point(545, 63);
+            ListViewFinancial.MultiSelect = false;
             ListViewFinancial.Name = "ListViewFinancial";
             ListViewFinancial.Size = new Size(536, 595);
             ListViewFinancial.TabIndex = 2;
@@ -206,6 +210,7 @@
             Name = "FormDayDetail";
             StartPosition = FormStartPosition.CenterParent;
             Text = "MUTAVEL";
+            WindowState = FormWindowState.Maximized;
             KeyDown += FormDayDetail_KeyDown;
             MainTableLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);

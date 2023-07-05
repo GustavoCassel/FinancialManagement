@@ -1,15 +1,17 @@
-﻿using AppLib.EntryManagement;
-using AppLib.ExcelApplication;
+﻿using AppUI.EntryManagement;
+using AppUI.ExcelApplication;
 using System.Diagnostics;
 
-namespace AppLib.Managers;
+namespace AppUI.Managers;
 
 public sealed class FinancialManager : IExcelReader
 {
     private readonly Excel _excelReader;
-    public FinancialManager(Excel excelReader)
+    private readonly FormMenu _formMenu;
+    public FinancialManager(Excel excelReader, FormMenu formMenu)
     {
         _excelReader = excelReader;
+        _formMenu = formMenu;
     }
 
     public List<DailyEntries> GetEntries()
@@ -21,9 +23,8 @@ public sealed class FinancialManager : IExcelReader
 
         for (int rowIndex = 1; rowIndex < rowsCount; rowIndex++)
         {
-#if DEBUG
-            Debug.WriteLine($"Razão Financeira linha: {rowIndex}");
-#endif
+            _formMenu.UpdateLineLogger(rowsCount, rowIndex);
+
             string? balanceTypeCode = _excelReader.GetTextFromWorksheet(rowIndex, "T");
             if (!string.IsNullOrWhiteSpace(balanceTypeCode))
                 if (balanceTypeCode != SupplierCode)
@@ -50,7 +51,10 @@ public sealed class FinancialManager : IExcelReader
 
             Entry? entry = GetEntry(rowIndex, date);
             if (entry != null)
+            {
+                _formMenu.AppendLogMessage(entry);
                 dailyEntries.AddEntry(entry);
+            }
         }
 
         return entries.OrderBy(entry => entry.Date).ToList();

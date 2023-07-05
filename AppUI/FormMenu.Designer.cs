@@ -28,24 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Label label1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMenu));
             LabelStatus = new Label();
             ButtonStart = new Button();
-            LabelLoading = new Label();
             ListViewMatch = new ListView();
             columnHeader9 = new ColumnHeader();
             columnHeader8 = new ColumnHeader();
             columnHeader5 = new ColumnHeader();
             columnHeader6 = new ColumnHeader();
-            label1 = new Label();
             LabelLog = new Label();
+            GroupBoxLog = new GroupBox();
+            ListViewLog = new ListView();
+            Main = new ColumnHeader();
+            LabelRowLine = new Label();
+            label1 = new Label();
+            GroupBoxLog.SuspendLayout();
             SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 30);
+            label1.Name = "label1";
+            label1.Size = new Size(313, 21);
+            label1.TabIndex = 9;
+            label1.Text = "Dê duplo-clique na linha para abrir detalhes";
             // 
             // LabelStatus
             // 
-            LabelStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            LabelStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             LabelStatus.AutoSize = true;
-            LabelStatus.Location = new Point(595, 515);
+            LabelStatus.Location = new Point(513, 39);
             LabelStatus.Name = "LabelStatus";
             LabelStatus.Size = new Size(55, 21);
             LabelStatus.TabIndex = 11;
@@ -54,9 +68,8 @@
             // 
             // ButtonStart
             // 
-            ButtonStart.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ButtonStart.BackColor = Color.DarkTurquoise;
-            ButtonStart.Location = new Point(538, 12);
+            ButtonStart.Location = new Point(358, 24);
             ButtonStart.Name = "ButtonStart";
             ButtonStart.Size = new Size(134, 39);
             ButtonStart.TabIndex = 0;
@@ -64,28 +77,18 @@
             ButtonStart.UseVisualStyleBackColor = false;
             ButtonStart.Click += ButtonStart_Click;
             // 
-            // LabelLoading
-            // 
-            LabelLoading.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            LabelLoading.AutoSize = true;
-            LabelLoading.Location = new Point(538, 65);
-            LabelLoading.Name = "LabelLoading";
-            LabelLoading.Size = new Size(101, 21);
-            LabelLoading.TabIndex = 3;
-            LabelLoading.Text = "Carregando...";
-            LabelLoading.Visible = false;
-            // 
             // ListViewMatch
             // 
-            ListViewMatch.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            ListViewMatch.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             ListViewMatch.Columns.AddRange(new ColumnHeader[] { columnHeader9, columnHeader8, columnHeader5, columnHeader6 });
             ListViewMatch.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             ListViewMatch.FullRowSelect = true;
             ListViewMatch.GridLines = true;
             ListViewMatch.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            ListViewMatch.Location = new Point(12, 50);
+            ListViewMatch.Location = new Point(12, 66);
+            ListViewMatch.MultiSelect = false;
             ListViewMatch.Name = "ListViewMatch";
-            ListViewMatch.Size = new Size(506, 545);
+            ListViewMatch.Size = new Size(660, 727);
             ListViewMatch.TabIndex = 8;
             ListViewMatch.UseCompatibleStateImageBehavior = false;
             ListViewMatch.View = View.Details;
@@ -111,22 +114,13 @@
             columnHeader6.Text = "Diferença Total";
             columnHeader6.Width = 100;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(12, 12);
-            label1.Name = "label1";
-            label1.Size = new Size(313, 21);
-            label1.TabIndex = 9;
-            label1.Text = "Dê duplo-clique na linha para abrir detalhes";
-            // 
             // LabelLog
             // 
-            LabelLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            LabelLog.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             LabelLog.BackColor = Color.MediumTurquoise;
             LabelLog.BorderStyle = BorderStyle.FixedSingle;
             LabelLog.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelLog.Location = new Point(578, 541);
+            LabelLog.Location = new Point(578, 9);
             LabelLog.Name = "LabelLog";
             LabelLog.Size = new Size(94, 54);
             LabelLog.TabIndex = 10;
@@ -134,17 +128,61 @@
             LabelLog.TextAlign = ContentAlignment.MiddleCenter;
             LabelLog.Visible = false;
             // 
+            // GroupBoxLog
+            // 
+            GroupBoxLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            GroupBoxLog.Controls.Add(ListViewLog);
+            GroupBoxLog.Controls.Add(LabelRowLine);
+            GroupBoxLog.Location = new Point(12, 627);
+            GroupBoxLog.Name = "GroupBoxLog";
+            GroupBoxLog.Size = new Size(660, 166);
+            GroupBoxLog.TabIndex = 12;
+            GroupBoxLog.TabStop = false;
+            GroupBoxLog.Text = "LOGFILENAME";
+            GroupBoxLog.Visible = false;
+            GroupBoxLog.Resize += GroupBoxLog_Resize;
+            // 
+            // ListViewLog
+            // 
+            ListViewLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            ListViewLog.Columns.AddRange(new ColumnHeader[] { Main });
+            ListViewLog.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            ListViewLog.FullRowSelect = true;
+            ListViewLog.GridLines = true;
+            ListViewLog.HeaderStyle = ColumnHeaderStyle.None;
+            ListViewLog.Location = new Point(6, 53);
+            ListViewLog.MultiSelect = false;
+            ListViewLog.Name = "ListViewLog";
+            ListViewLog.Size = new Size(648, 107);
+            ListViewLog.TabIndex = 9;
+            ListViewLog.UseCompatibleStateImageBehavior = false;
+            ListViewLog.View = View.Details;
+            // 
+            // Main
+            // 
+            Main.Text = "Main";
+            Main.Width = 620;
+            // 
+            // LabelRowLine
+            // 
+            LabelRowLine.AutoSize = true;
+            LabelRowLine.Location = new Point(16, 27);
+            LabelRowLine.Name = "LabelRowLine";
+            LabelRowLine.Size = new Size(109, 21);
+            LabelRowLine.TabIndex = 0;
+            LabelRowLine.Text = "LOGROWLINE";
+            // 
             // FormMenu
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
-            ClientSize = new Size(684, 607);
+            ClientSize = new Size(684, 805);
+            Controls.Add(GroupBoxLog);
             Controls.Add(LabelStatus);
             Controls.Add(LabelLog);
             Controls.Add(label1);
             Controls.Add(ListViewMatch);
-            Controls.Add(LabelLoading);
             Controls.Add(ButtonStart);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -155,6 +193,8 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Calcular e Comparar";
             KeyDown += FormMenu_KeyDown;
+            GroupBoxLog.ResumeLayout(false);
+            GroupBoxLog.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -162,7 +202,6 @@
         #endregion
 
         private Button ButtonStart;
-        private Label LabelLoading;
         private ListView ListViewMatch;
         private ColumnHeader columnHeader8;
         private ColumnHeader columnHeader9;
@@ -171,5 +210,9 @@
         private Label label1;
         private Label LabelLog;
         private Label LabelStatus;
+        private GroupBox GroupBoxLog;
+        private Label LabelRowLine;
+        private ListView ListViewLog;
+        private ColumnHeader Main;
     }
 }

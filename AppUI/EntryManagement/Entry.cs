@@ -1,4 +1,4 @@
-﻿namespace AppLib.EntryManagement;
+﻿namespace AppUI.EntryManagement;
 
 public enum Payment
 {
@@ -9,7 +9,7 @@ public enum Payment
 
 public sealed class Entry
 {
-    public string? InvoiceCode { get; init; }
+    public string InvoiceCode { get; init; }
     public DateTime Date { get; init; }
     public string Description { get; init; }
     public Payment Payment { get; init; }
@@ -30,7 +30,7 @@ public sealed class Entry
 
     public Entry(string? invoiceCode, DateTime date, string description, Payment payment, decimal value)
     {
-        InvoiceCode = invoiceCode;
+        InvoiceCode = invoiceCode ?? "Não Encontrado";
         Date = date;
         Description = description;
         Payment = payment;

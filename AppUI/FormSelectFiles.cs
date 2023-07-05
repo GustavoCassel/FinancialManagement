@@ -8,6 +8,17 @@ namespace AppUI
         public FormSelectFiles()
         {
             InitializeComponent();
+#if DEBUG
+            const string AccPath = "C:\\Users\\gustavo.cassel\\Desktop\\PLANILHA\\RazaoFinanceira0106_3006.xls";
+            AccountingFileName = AccPath;
+            TextBoxAccountingPath.Text = AccountingFileName;
+            TextBoxAccountingPath.Visible = AccountingFileName != null;
+
+            const string FinPath = "C:\\Users\\gustavo.cassel\\Desktop\\PLANILHA\\35083 RAZ AUX CPAGAR  010623 300623.xls";
+            FinancialFileName = FinPath;
+            TextBoxFinancialPath.Text = FinancialFileName;
+            TextBoxFinancialPath.Visible = FinancialFileName != null;
+#endif
         }
 
         #region Events
@@ -43,9 +54,7 @@ namespace AppUI
         private void AutoReziseTextBox(TextBox textBox)
         {
             if (string.IsNullOrWhiteSpace(textBox.Text.Trim()))
-            {
                 return;
-            }
 
             Size size = TextRenderer.MeasureText(textBox.Text, TextBoxAccountingPath.Font);
             textBox.Width = size.Width;
@@ -84,6 +93,7 @@ namespace AppUI
             }
 
             Hide();
+
             _ = new FormMenu(
                 AccountingFileName,
                 FinancialFileName)

@@ -1,4 +1,4 @@
-﻿namespace AppLib.EntryManagement;
+﻿namespace AppUI.EntryManagement;
 
 public sealed class DailyEntries
 {

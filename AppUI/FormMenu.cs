@@ -1,6 +1,6 @@
-﻿using AppLib.EntryManagement;
-using AppLib.ExcelApplication;
-using AppLib.Managers;
+﻿using AppUI.EntryManagement;
+using AppUI.ExcelApplication;
+using AppUI.Managers;
 
 namespace AppUI;
 
@@ -28,7 +28,7 @@ public partial class FormMenu : Form
         try
         {
             using Excel excel = new(_accountingFilePath);
-            IExcelReader manager = new AccoutingManager(excel);
+            IExcelReader manager = new AccoutingManager(excel, this);
 
             return manager.GetEntries();
         }
@@ -43,7 +43,7 @@ public partial class FormMenu : Form
         try
         {
             using Excel excel = new(_financialFilePath);
-            IExcelReader manager = new FinancialManager(excel);
+            IExcelReader manager = new FinancialManager(excel, this);
 
             return manager.GetEntries();
         }
@@ -56,7 +56,9 @@ public partial class FormMenu : Form
     private void ButtonStart_Click(object sender, EventArgs e)
     {
         ButtonStart.Visible = false;
-        LabelLoading.Visible = true;
+        GroupBoxLog.Visible = true;
+
+        GroupBoxLog.Text = "Lendo Arquivo Razão Contábil";
 
         try
         {
@@ -75,6 +77,7 @@ public partial class FormMenu : Form
 
         Update();
 
+        GroupBoxLog.Text = "Lendo Arquivo Razão Financeira";
         try
         {
             _financialEntries = GetFinancialEntries();
@@ -90,8 +93,7 @@ public partial class FormMenu : Form
             return;
         }
 
-        LabelLoading.Visible = false;
-
+        GroupBoxLog.Text = "Comparando Valores";
         try
         {
             MatchValues();
@@ -192,9 +194,27 @@ public partial class FormMenu : Form
 
     private void ChangeLog(bool success)
     {
+        GroupBoxLog.Visible = false;
+
         LabelStatus.Visible = true;
         LabelLog.Visible = true;
         LabelLog.BackColor = success ? Color.Lime : Color.Red;
         LabelLog.Text = success ? "OK" : "ERRO";
+    }
+
+    public void UpdateLineLogger(int totalRows, int currentRow)
+    {
+        LabelRowLine.Text = $"Linha: {currentRow} de: {totalRows}";
+    }
+
+    public void AppendLogMessage(Entry entry)
+    {
+        string message = $"Dia: {entry.Date.Day:00}-{entry.Date.Month:00} Nota: {entry.InvoiceCode} Tipo: {entry.Payment} Valor: {entry.Value:C2}";
+        ListViewLog.Items.Add(new ListViewItem(message)).EnsureVisible();
+    }
+
+    private void GroupBoxLog_Resize(object sender, EventArgs e)
+    {
+        ListViewLog.Columns[0].Width = ListViewLog.Width - 20;
     }
 }

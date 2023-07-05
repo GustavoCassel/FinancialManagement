@@ -110,6 +110,7 @@
             Margin = new Padding(4);
             MaximizeBox = false;
             MinimizeBox = false;
+            MinimumSize = new Size(800, 500);
             Name = "FormHelp";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Menu de Ajuda";
