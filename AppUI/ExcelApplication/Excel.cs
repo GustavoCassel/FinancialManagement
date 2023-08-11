@@ -63,6 +63,14 @@ public sealed class Excel : IDisposable
         return result;
     }
 
+    public async Task WriteValueToWorksheet(int row, string column, string value)
+    {
+        await Task.Run(delegate
+        {
+            _worksheet.Cells[row, column].Value = value;
+        });
+    }
+
     public void GetPaymentAndValue(int row, string columnDebit, string columnCredit, out Payment payment, out decimal value)
     {
         decimal debitValue = GetValueFromWorksheet(row, columnDebit);

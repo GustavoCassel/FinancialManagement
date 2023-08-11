@@ -46,6 +46,7 @@ partial class FormDayDetail
         columnHeader10 = new ColumnHeader();
         columnHeader8 = new ColumnHeader();
         LabelInfoFinancial = new Label();
+        LabelTitle = new Label();
         label1 = new Label();
         label2 = new Label();
         MainTableLayoutPanel.SuspendLayout();
@@ -61,6 +62,16 @@ partial class FormDayDetail
         label1.Text = "Informações Razão Contábil:";
         label1.TextAlign = ContentAlignment.MiddleCenter;
         // 
+        // label2
+        // 
+        label2.Dock = DockStyle.Fill;
+        label2.Location = new Point(545, 0);
+        label2.Name = "label2";
+        label2.Size = new Size(536, 30);
+        label2.TabIndex = 9;
+        label2.Text = "Informações Razão Auxiliar Contas a Pagar:";
+        label2.TextAlign = ContentAlignment.MiddleCenter;
+        // 
         // MainTableLayoutPanel
         // 
         MainTableLayoutPanel.AutoSize = true;
@@ -74,13 +85,13 @@ partial class FormDayDetail
         MainTableLayoutPanel.Controls.Add(ListViewFinancial, 1, 2);
         MainTableLayoutPanel.Controls.Add(LabelInfoFinancial, 1, 1);
         MainTableLayoutPanel.Dock = DockStyle.Fill;
-        MainTableLayoutPanel.Location = new Point(0, 0);
+        MainTableLayoutPanel.Location = new Point(0, 40);
         MainTableLayoutPanel.Name = "MainTableLayoutPanel";
         MainTableLayoutPanel.RowCount = 3;
         MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
         MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
         MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        MainTableLayoutPanel.Size = new Size(1084, 661);
+        MainTableLayoutPanel.Size = new Size(1084, 621);
         MainTableLayoutPanel.TabIndex = 10;
         // 
         // LabelInfoAccouting
@@ -93,16 +104,6 @@ partial class FormDayDetail
         LabelInfoAccouting.Text = "MUTAVEL";
         LabelInfoAccouting.TextAlign = ContentAlignment.MiddleCenter;
         // 
-        // label2
-        // 
-        label2.Dock = DockStyle.Fill;
-        label2.Location = new Point(545, 0);
-        label2.Name = "label2";
-        label2.Size = new Size(536, 30);
-        label2.TabIndex = 9;
-        label2.Text = "Informações Razão Auxiliar Contas a Pagar:";
-        label2.TextAlign = ContentAlignment.MiddleCenter;
-        // 
         // ListViewAccounting
         // 
         ListViewAccounting.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -113,7 +114,7 @@ partial class FormDayDetail
         ListViewAccounting.Location = new Point(3, 63);
         ListViewAccounting.MultiSelect = false;
         ListViewAccounting.Name = "ListViewAccounting";
-        ListViewAccounting.Size = new Size(536, 595);
+        ListViewAccounting.Size = new Size(536, 555);
         ListViewAccounting.TabIndex = 1;
         ListViewAccounting.UseCompatibleStateImageBehavior = false;
         ListViewAccounting.View = View.Details;
@@ -155,7 +156,7 @@ partial class FormDayDetail
         ListViewFinancial.Location = new Point(545, 63);
         ListViewFinancial.MultiSelect = false;
         ListViewFinancial.Name = "ListViewFinancial";
-        ListViewFinancial.Size = new Size(536, 595);
+        ListViewFinancial.Size = new Size(536, 555);
         ListViewFinancial.TabIndex = 2;
         ListViewFinancial.UseCompatibleStateImageBehavior = false;
         ListViewFinancial.View = View.Details;
@@ -196,6 +197,17 @@ partial class FormDayDetail
         LabelInfoFinancial.Text = "MUTAVEL";
         LabelInfoFinancial.TextAlign = ContentAlignment.MiddleCenter;
         // 
+        // LabelTitle
+        // 
+        LabelTitle.Dock = DockStyle.Top;
+        LabelTitle.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point);
+        LabelTitle.Location = new Point(0, 0);
+        LabelTitle.Name = "LabelTitle";
+        LabelTitle.Size = new Size(1084, 40);
+        LabelTitle.TabIndex = 11;
+        LabelTitle.Text = "MUTAVEL";
+        LabelTitle.TextAlign = ContentAlignment.MiddleCenter;
+        // 
         // FormDayDetail
         // 
         AutoScaleDimensions = new SizeF(9F, 21F);
@@ -203,13 +215,14 @@ partial class FormDayDetail
         BackColor = Color.MediumPurple;
         ClientSize = new Size(1084, 661);
         Controls.Add(MainTableLayoutPanel);
+        Controls.Add(LabelTitle);
         Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         Icon = (Icon)resources.GetObject("$this.Icon");
         KeyPreview = true;
         Margin = new Padding(4);
         Name = "FormDayDetail";
         StartPosition = FormStartPosition.CenterParent;
-        Text = "MUTAVEL";
+        Text = "Resumo Diário";
         WindowState = FormWindowState.Maximized;
         KeyDown += FormDayDetail_KeyDown;
         MainTableLayoutPanel.ResumeLayout(false);
@@ -236,4 +249,5 @@ partial class FormDayDetail
     private Label LabelInfoFinancial;
     private ColumnHeader columnHeader9;
     private ColumnHeader columnHeader10;
+    private Label LabelTitle;
 }

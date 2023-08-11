@@ -42,6 +42,7 @@ partial class FormMenu
         ListViewLog = new ListView();
         Main = new ColumnHeader();
         LabelRowLine = new Label();
+        ButtonGenerateReport = new Button();
         label1 = new Label();
         GroupBoxLog.SuspendLayout();
         SuspendLayout();
@@ -161,7 +162,7 @@ partial class FormMenu
         // Main
         // 
         Main.Text = "Main";
-        Main.Width = 620;
+        Main.Width = 600;
         // 
         // LabelRowLine
         // 
@@ -171,6 +172,17 @@ partial class FormMenu
         LabelRowLine.Size = new Size(109, 21);
         LabelRowLine.TabIndex = 0;
         LabelRowLine.Text = "LOGROWLINE";
+        // 
+        // ButtonGenerateReport
+        // 
+        ButtonGenerateReport.Location = new Point(358, 9);
+        ButtonGenerateReport.Name = "ButtonGenerateReport";
+        ButtonGenerateReport.Size = new Size(134, 54);
+        ButtonGenerateReport.TabIndex = 13;
+        ButtonGenerateReport.Text = "Gerar Relatório";
+        ButtonGenerateReport.UseVisualStyleBackColor = true;
+        ButtonGenerateReport.Visible = false;
+        ButtonGenerateReport.Click += ButtonGenerateReport_Click;
         // 
         // FormMenu
         // 
@@ -184,6 +196,7 @@ partial class FormMenu
         Controls.Add(label1);
         Controls.Add(ListViewMatch);
         Controls.Add(ButtonStart);
+        Controls.Add(ButtonGenerateReport);
         Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         Icon = (Icon)resources.GetObject("$this.Icon");
         KeyPreview = true;
@@ -214,4 +227,5 @@ partial class FormMenu
     private Label LabelRowLine;
     private ListView ListViewLog;
     private ColumnHeader Main;
+    private Button ButtonGenerateReport;
 }

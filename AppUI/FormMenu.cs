@@ -1,6 +1,8 @@
 ﻿using AppUI.EntryManagement;
 using AppUI.ExcelApplication;
 using AppUI.Managers;
+using AppUI.Reports;
+using AppUI.Util;
 
 namespace AppUI;
 
@@ -20,7 +22,13 @@ public partial class FormMenu : Form
 
     private void FormMenu_KeyDown(object sender, KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.Escape) { Close(); Dispose(); }
+        if (e.KeyCode != Keys.Escape)
+            return;
+
+        if (!UserMessage.ShowQuestionUserYes("Confirma saída?"))
+            return;
+
+        Close();
     }
 
     private async Task<List<DailyEntries>> GetAccoutingEntries()
@@ -50,57 +58,60 @@ public partial class FormMenu : Form
         ButtonStart.Visible = false;
         GroupBoxLog.Visible = true;
 
-        GroupBoxLog.Text = "Lendo Arquivo Razão Contábil";
-
         try
         {
+            GroupBoxLog.Text = "Lendo Arquivo Razão Contábil";
             _accoutingEntries = await GetAccoutingEntries();
             if (_accoutingEntries.Count == 0)
                 throw new Exception("Não encontrou nenhum lançamento!");
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erro ao analisar o arquivo!\nErro: {ex.Message}",
-                "Razão Contábil!", MessageBoxButtons.OK,
-                MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            UserMessage.ShowError($"""
+                Razão Contábil!
+                Erro ao analisar o arquivo!
+                Erro: {ex.Message}
+                """, Level.Warning);
             Dispose();
             return;
         }
 
         Update();
 
-        GroupBoxLog.Text = "Lendo Arquivo Razão Financeira";
         try
         {
+            GroupBoxLog.Text = "Lendo Arquivo Razão Financeira";
             _financialEntries = await GetFinancialEntries();
             if (_financialEntries.Count == 0)
                 throw new Exception("Não encontrou nenhum lançamento!");
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erro ao analisar o arquivo!\nErro: {ex.Message}",
-                "Razão Auxiliar Contas a Pagar!", MessageBoxButtons.OK,
-                MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            UserMessage.ShowError($"""
+                Razão Auxiliar Contas a Pagar!
+                Erro ao analisar o arquivo!
+                Erro: {ex.Message}
+                """, Level.Warning);
             Dispose();
             return;
         }
 
-        GroupBoxLog.Text = "Comparando Valores";
-
         try
         {
+            GroupBoxLog.Text = "Comparando Valores";
             MatchValues();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erro ao comparar valores!\nErro: {ex.Message}",
-               "Razão Auxiliar Contas a Pagar!", MessageBoxButtons.OK,
-               MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            UserMessage.ShowError($"""
+                Erro ao comparar valores!
+                Erro: {ex.Message}
+                """, Level.Warning);
             Dispose();
+            return;
         }
 
-
-
+        ButtonGenerateReport.Visible = true;
     }
 
     private void FormatListView()
@@ -168,21 +179,12 @@ public partial class FormMenu : Form
 
     private void ListViewMatch_ItemActivate(object sender, EventArgs e)
     {
-        //string dateRaw = ListViewMatch.SelectedItems[0].Text;
-        //if (!DateTime.TryParse(dateRaw, out DateTime date))
-        //{
-        //    MessageBox.Show($"Erro ao obter data da lista!",
-        //       "Erro Desconhecido!", MessageBoxButtons.OK,
-        //       MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
-        //    return;
-        //}
-
         DateTime date = (DateTime)ListViewMatch.SelectedItems[0].Tag;
 
         DailyEntries? accoutingEntries = _accoutingEntries.Find(entry => entry.Date == date);
         DailyEntries? financialEntries = _financialEntries.Find(entry => entry.Date == date);
 
-        if (accoutingEntries == null || financialEntries == null)
+        if (accoutingEntries is null || financialEntries is null)
         {
             MessageBox.Show($"Erro ao encontrar entradas!",
                "Erro Desconhecido!", MessageBoxButtons.OK,
@@ -212,6 +214,10 @@ public partial class FormMenu : Form
 
     public void AppendLogMessage(Entry entry)
     {
+        int MaxNumberOfItems = 1000;
+        if (ListViewLog.Items.Count == MaxNumberOfItems)
+            ListViewLog.Items.Clear();
+
         string message = $"Dia: {entry.Date.Day:00}-{entry.Date.Month:00} Nota: {entry.InvoiceCode} Tipo: {entry.Payment} Valor: {entry.Value:C2}";
         ListViewLog.Items.Add(new ListViewItem(message)).EnsureVisible();
     }
@@ -219,5 +225,41 @@ public partial class FormMenu : Form
     private void GroupBoxLog_Resize(object sender, EventArgs e)
     {
         ListViewLog.Columns[0].Width = ListViewLog.Width - 20;
+    }
+
+    private async void ButtonGenerateReport_Click(object sender, EventArgs e)
+    {
+        DateTime date = _financialEntries.First().Date;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Title = "Selecione o diretório para salvar o relatório",
+            Filter = "Arquivo XLSX|*.xlsx",
+            FileName = $"Relatorio-{date:MMMM-yyyy}",
+            OverwritePrompt = true
+        };
+
+        if (saveFileDialog.ShowDialog(this) == DialogResult.Cancel)
+        {
+            UserMessage.ShowError("Operação cancelada!", Level.Success);
+            return;
+        }
+
+        try
+        {
+            EntriesReport entriesReport = new(
+                saveFileDialog.FileName,
+                _accoutingEntries,
+                _financialEntries);
+
+            await entriesReport.GenerateRelatory();
+        }
+        catch (Exception ex)
+        {
+            UserMessage.ShowError($"""
+                Ocorreu um erro ao gerar o relatório!
+                Erro: {ex.Message}
+                """, Level.Warning);
+        }
     }
 }

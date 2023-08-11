@@ -1,19 +1,32 @@
 ﻿using AppUI.EntryManagement;
 using AppUI.Util;
+using System.Globalization;
 
 namespace AppUI;
 
 public partial class FormDayDetail : Form
 {
+    private readonly DailyEntries _accoutingEntries;
+    private readonly DailyEntries _financialEntries;
+
     public FormDayDetail(DateTime date, DailyEntries accoutingEntries, DailyEntries financialEntries)
     {
         InitializeComponent();
+        _accoutingEntries = accoutingEntries;
+        _financialEntries = financialEntries;
+
         ListViewAccounting.ListViewItemSorter = new ListViewColumnSorter(ListViewAccounting);
         ListViewFinancial.ListViewItemSorter = new ListViewColumnSorter(ListViewFinancial);
 
-        Text = $"Resumo dia: {date.ToShortDateString()}";
+        LabelTitle.Text = CultureInfo.CurrentCulture.TextInfo
+            .ToTitleCase(date.ToLongDateString());
 
-        UpdateDisplay(accoutingEntries, financialEntries);
+        Load += Form_Load;
+    }
+
+    private void Form_Load(object? sender, EventArgs e)
+    {
+        UpdateDisplay(_accoutingEntries, _financialEntries);
     }
 
     private void FormDayDetail_KeyDown(object sender, KeyEventArgs e)
@@ -50,6 +63,30 @@ public partial class FormDayDetail : Form
         AddToListViewEntries(ListViewFinancial, mergedFin);
 
         CompareAndPaintDifferent();
+
+        RemoveCorrectValues(ListViewAccounting);
+        RemoveCorrectValues(ListViewFinancial);
+
+        if (ListViewAccounting.Items.Count == 0 &&
+            ListViewFinancial.Items.Count == 0)
+        {
+            UserMessage.ShowSuccess("Não há registros para serem exibidos!");
+            Close();
+        }
+    }
+
+    private static void RemoveCorrectValues(ListView listView)
+    {
+        for (int i = listView.Items.Count - 1; i >= 0; i--)
+        {
+            ListViewItem item = listView.Items[i];
+
+            if (item.BackColor == Color.LightPink ||
+                item.BackColor == Color.Red)
+                continue;
+
+            listView.Items.RemoveAt(i);
+        }
     }
 
     private void CompareAndPaintDifferent()
