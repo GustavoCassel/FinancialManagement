@@ -23,37 +23,29 @@ public partial class FormMenu : Form
         if (e.KeyCode == Keys.Escape) { Close(); Dispose(); }
     }
 
-    private List<DailyEntries> GetAccoutingEntries()
+    private async Task<List<DailyEntries>> GetAccoutingEntries()
     {
-        try
+        return await Task.Run(delegate
         {
             using Excel excel = new(_accountingFilePath);
             IExcelReader manager = new AccoutingManager(excel, this);
 
             return manager.GetEntries();
-        }
-        catch
-        {
-            throw;
-        }
+        });
     }
 
-    private List<DailyEntries> GetFinancialEntries()
+    private async Task<List<DailyEntries>> GetFinancialEntries()
     {
-        try
+        return await Task.Run(delegate
         {
             using Excel excel = new(_financialFilePath);
             IExcelReader manager = new FinancialManager(excel, this);
 
             return manager.GetEntries();
-        }
-        catch
-        {
-            throw;
-        }
+        });
     }
 
-    private void ButtonStart_Click(object sender, EventArgs e)
+    private async void ButtonStart_Click(object sender, EventArgs e)
     {
         ButtonStart.Visible = false;
         GroupBoxLog.Visible = true;
@@ -62,7 +54,7 @@ public partial class FormMenu : Form
 
         try
         {
-            _accoutingEntries = GetAccoutingEntries();
+            _accoutingEntries = await GetAccoutingEntries();
             if (_accoutingEntries.Count == 0)
                 throw new Exception("Não encontrou nenhum lançamento!");
         }
@@ -80,7 +72,7 @@ public partial class FormMenu : Form
         GroupBoxLog.Text = "Lendo Arquivo Razão Financeira";
         try
         {
-            _financialEntries = GetFinancialEntries();
+            _financialEntries = await GetFinancialEntries();
             if (_financialEntries.Count == 0)
                 throw new Exception("Não encontrou nenhum lançamento!");
         }
@@ -94,6 +86,7 @@ public partial class FormMenu : Form
         }
 
         GroupBoxLog.Text = "Comparando Valores";
+
         try
         {
             MatchValues();
@@ -105,6 +98,9 @@ public partial class FormMenu : Form
                MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
             Dispose();
         }
+
+
+
     }
 
     private void FormatListView()
@@ -159,7 +155,12 @@ public partial class FormMenu : Form
                 $"{Math.Abs(difCredit - difDebit):C2}"
             };
 
-            ListViewMatch.Items.Add(new ListViewItem(row));
+            ListViewItem item = new(row)
+            {
+                Tag = dailyAcc.Date
+            };
+
+            ListViewMatch.Items.Add(item);
         }
 
         FormatListView();
@@ -167,14 +168,16 @@ public partial class FormMenu : Form
 
     private void ListViewMatch_ItemActivate(object sender, EventArgs e)
     {
-        string dateRaw = ListViewMatch.SelectedItems[0].Text;
-        if (!DateTime.TryParse(dateRaw, out DateTime date))
-        {
-            MessageBox.Show($"Erro ao obter data da lista!",
-               "Erro Desconhecido!", MessageBoxButtons.OK,
-               MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
-            return;
-        }
+        //string dateRaw = ListViewMatch.SelectedItems[0].Text;
+        //if (!DateTime.TryParse(dateRaw, out DateTime date))
+        //{
+        //    MessageBox.Show($"Erro ao obter data da lista!",
+        //       "Erro Desconhecido!", MessageBoxButtons.OK,
+        //       MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+        //    return;
+        //}
+
+        DateTime date = (DateTime)ListViewMatch.SelectedItems[0].Tag;
 
         DailyEntries? accoutingEntries = _accoutingEntries.Find(entry => entry.Date == date);
         DailyEntries? financialEntries = _financialEntries.Find(entry => entry.Date == date);

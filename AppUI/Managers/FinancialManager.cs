@@ -1,6 +1,5 @@
 ﻿using AppUI.EntryManagement;
 using AppUI.ExcelApplication;
-using System.Diagnostics;
 
 namespace AppUI.Managers;
 
@@ -23,7 +22,10 @@ public sealed class FinancialManager : IExcelReader
 
         for (int rowIndex = 1; rowIndex < rowsCount; rowIndex++)
         {
-            _formMenu.UpdateLineLogger(rowsCount, rowIndex);
+            _formMenu.Invoke(delegate
+            {
+                _formMenu.UpdateLineLogger(rowsCount, rowIndex);
+            });
 
             string? balanceTypeCode = _excelReader.GetTextFromWorksheet(rowIndex, "T");
             if (!string.IsNullOrWhiteSpace(balanceTypeCode))
@@ -52,7 +54,11 @@ public sealed class FinancialManager : IExcelReader
             Entry? entry = GetEntry(rowIndex, date);
             if (entry != null)
             {
-                _formMenu.AppendLogMessage(entry);
+                _formMenu.Invoke(delegate
+                {
+                    _formMenu.AppendLogMessage(entry);
+                });
+
                 dailyEntries.AddEntry(entry);
             }
         }

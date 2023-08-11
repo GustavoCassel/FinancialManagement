@@ -1,6 +1,5 @@
 ﻿using AppUI.EntryManagement;
 using AppUI.ExcelApplication;
-using System.Diagnostics;
 
 namespace AppUI.Managers;
 
@@ -21,7 +20,10 @@ public sealed class AccoutingManager : IExcelReader
 
         for (int rowIndex = 1; rowIndex < rowsCount; rowIndex++)
         {
-            _formMenu.UpdateLineLogger(rowsCount, rowIndex);
+            _formMenu.Invoke(delegate
+            {
+                _formMenu.UpdateLineLogger(rowsCount, rowIndex);
+            });
 
             string? dateOrDashValue = _excelReader.GetTextFromWorksheet(rowIndex, "A");
 
@@ -53,7 +55,10 @@ public sealed class AccoutingManager : IExcelReader
 
             if (entry != null)
             {
-                _formMenu.AppendLogMessage(entry);
+                _formMenu.Invoke(delegate
+                {
+                    _formMenu.AppendLogMessage(entry);
+                });
                 daily.AddEntry(entry);
             }
         }
