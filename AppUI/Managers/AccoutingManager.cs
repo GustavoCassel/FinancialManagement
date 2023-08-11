@@ -53,14 +53,15 @@ public sealed class AccoutingManager : IExcelReader
 
             Entry? entry = GetEntry(rowIndex, daily.Date);
 
-            if (entry != null)
+            if (entry is null)
+                continue;
+
+            _formMenu.Invoke(delegate
             {
-                _formMenu.Invoke(delegate
-                {
-                    _formMenu.AppendLogMessage(entry);
-                });
-                daily.AddEntry(entry);
-            }
+                _formMenu.AppendLogMessage(entry);
+            });
+
+            daily.AddEntry(entry);
         }
 
         return stack.OrderBy(entry => entry.Date).ToList();

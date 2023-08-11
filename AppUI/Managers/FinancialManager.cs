@@ -45,22 +45,23 @@ public sealed class FinancialManager : IExcelReader
                     continue;
 
             DailyEntries? dailyEntries = entries.Find(entry => entry.Date == date);
-            if (dailyEntries == null)
+            if (dailyEntries is null)
             {
                 dailyEntries = new DailyEntries(date);
                 entries.Add(dailyEntries);
             }
 
             Entry? entry = GetEntry(rowIndex, date);
-            if (entry != null)
-            {
-                _formMenu.Invoke(delegate
-                {
-                    _formMenu.AppendLogMessage(entry);
-                });
 
-                dailyEntries.AddEntry(entry);
-            }
+            if (entry is null)
+                continue;
+
+            _formMenu.Invoke(delegate
+            {
+                _formMenu.AppendLogMessage(entry);
+            });
+
+            dailyEntries.AddEntry(entry);
         }
 
         return entries.OrderBy(entry => entry.Date).ToList();
