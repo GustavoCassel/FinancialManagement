@@ -9,7 +9,7 @@ public partial class FormDayDetail : Form
     private readonly DailyEntries _accoutingEntries;
     private readonly DailyEntries _financialEntries;
 
-    public FormDayDetail(DateTime date, DailyEntries accoutingEntries, DailyEntries financialEntries)
+    public FormDayDetail(FormMenu formMenu, DateTime date, DailyEntries accoutingEntries, DailyEntries financialEntries)
     {
         InitializeComponent();
         _accoutingEntries = accoutingEntries;
@@ -21,12 +21,16 @@ public partial class FormDayDetail : Form
         LabelTitle.Text = CultureInfo.CurrentCulture.TextInfo
             .ToTitleCase(date.ToLongDateString());
 
-        Load += Form_Load;
-    }
-
-    private void Form_Load(object? sender, EventArgs e)
-    {
         UpdateDisplay(_accoutingEntries, _financialEntries);
+
+        if (ListViewAccounting.Items.Count == 0 &&
+            ListViewFinancial.Items.Count == 0)
+        {
+            UserMessage.ShowSuccess("Não há registros para serem exibidos!");
+            return;
+        }
+
+        ShowDialog(formMenu);
     }
 
     private void FormDayDetail_KeyDown(object sender, KeyEventArgs e)
@@ -66,13 +70,6 @@ public partial class FormDayDetail : Form
 
         RemoveCorrectValues(ListViewAccounting);
         RemoveCorrectValues(ListViewFinancial);
-
-        if (ListViewAccounting.Items.Count == 0 &&
-            ListViewFinancial.Items.Count == 0)
-        {
-            UserMessage.ShowSuccess("Não há registros para serem exibidos!");
-            Close();
-        }
     }
 
     private static void RemoveCorrectValues(ListView listView)

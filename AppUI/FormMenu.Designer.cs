@@ -141,7 +141,6 @@ partial class FormMenu
         GroupBoxLog.TabStop = false;
         GroupBoxLog.Text = "LOGFILENAME";
         GroupBoxLog.Visible = false;
-        GroupBoxLog.Resize += GroupBoxLog_Resize;
         // 
         // ListViewLog
         // 

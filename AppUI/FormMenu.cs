@@ -25,7 +25,7 @@ public partial class FormMenu : Form
         if (e.KeyCode != Keys.Escape)
             return;
 
-        if (!UserMessage.ShowQuestionUserYes("Confirma saída?"))
+        if (!UserMessage.ShowQuestionUserYes("Confirma Saída?"))
             return;
 
         Close();
@@ -193,7 +193,7 @@ public partial class FormMenu : Form
         }
 
         Hide();
-        _ = new FormDayDetail(date, accoutingEntries, financialEntries).ShowDialog(this);
+        _ = new FormDayDetail(this,date, accoutingEntries, financialEntries);
         Show();
     }
 
@@ -220,11 +220,6 @@ public partial class FormMenu : Form
 
         string message = $"Dia: {entry.Date.Day:00}-{entry.Date.Month:00} Nota: {entry.InvoiceCode} Tipo: {entry.Payment} Valor: {entry.Value:C2}";
         ListViewLog.Items.Add(new ListViewItem(message)).EnsureVisible();
-    }
-
-    private void GroupBoxLog_Resize(object sender, EventArgs e)
-    {
-        ListViewLog.Columns[0].Width = ListViewLog.Width - 20;
     }
 
     private async void ButtonGenerateReport_Click(object sender, EventArgs e)
