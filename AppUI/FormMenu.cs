@@ -193,7 +193,7 @@ public partial class FormMenu : Form
         }
 
         Hide();
-        _ = new FormDayDetail(this,date, accoutingEntries, financialEntries);
+        _ = new FormDayDetail(this, date, accoutingEntries, financialEntries);
         Show();
     }
 
@@ -224,6 +224,8 @@ public partial class FormMenu : Form
 
     private async void ButtonGenerateReport_Click(object sender, EventArgs e)
     {
+        UserMessage.ShowError("Não implementado ainda!", Level.Warning);
+        /*
         DateTime date = _financialEntries.First().Date;
 
         SaveFileDialog saveFileDialog = new()
@@ -247,7 +249,7 @@ public partial class FormMenu : Form
                 _accoutingEntries,
                 _financialEntries);
 
-            await entriesReport.GenerateRelatory();
+            entriesReport.GenerateRelatory();
         }
         catch (Exception ex)
         {
@@ -256,5 +258,6 @@ public partial class FormMenu : Form
                 Erro: {ex.Message}
                 """, Level.Warning);
         }
+        */
     }
 }

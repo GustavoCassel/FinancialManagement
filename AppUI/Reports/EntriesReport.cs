@@ -18,27 +18,8 @@ public sealed class EntriesReport
         _financialEntries = financialEntries;
     }
 
-    public async Task GenerateRelatory()
+    public void GenerateRelatory()
     {
-        /*int rowIndex = 0;
-        foreach (DailyEntries accoutingEntries in _accoutingEntries)
-        {
-            rowIndex++;
-
-            DailyEntries? financialEntries = _financialEntries.Find(
-                entry => entry.Date == accoutingEntries.Date)
-                ?? throw new Exception();
-
-            await _excel.WriteValueToWorksheet(rowIndex);
-
-            string[] row = new string[4]
-            {
-                dailyAcc.Date.ToShortDateString(),
-                $"{Math.Abs(difCredit):C2}",
-                $"{Math.Abs(difDebit):C2}",
-                $"{Math.Abs(difCredit - difDebit):C2}"
-            };
-
-        }*/
+        throw new NotImplementedException();
     }
 }
